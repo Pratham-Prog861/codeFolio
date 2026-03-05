@@ -34,6 +34,15 @@ export default function RootLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="githubResume"
+        options={{
+          title: "Resume",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="newspaper-outline" size={size} color={color} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }
