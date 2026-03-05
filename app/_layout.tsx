@@ -25,6 +25,15 @@ export default function RootLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="repoExplorer"
+        options={{
+          title: "Explore",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="flame-outline" size={size} color={color} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }
