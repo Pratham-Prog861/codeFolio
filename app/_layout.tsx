@@ -35,6 +35,15 @@ export default function RootLayout() {
         }}
       />
       <Tabs.Screen
+        name="savedDeveloper"
+        options={{
+          title: "Saved",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="bookmark-outline" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="githubResume"
         options={{
           title: "Resume",

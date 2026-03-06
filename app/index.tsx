@@ -1,5 +1,7 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
-import React, { useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useLocalSearchParams } from "expo-router";
+import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -18,20 +20,37 @@ import ProfileCard, { GitHubUser } from "../components/ProfileCard";
 import RepoCard, { GitHubRepo } from "../components/RepoCard";
 import ResumeCard from "../components/ResumeCard";
 
+const STORAGE_KEY = "savedDevelopers";
+
 export default function Index() {
+  const params = useLocalSearchParams<{ username?: string }>();
+
   const [query, setQuery] = useState("");
   const [user, setUser] = useState<GitHubUser | null>(null);
   const [repos, setRepos] = useState<GitHubRepo[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [searchedUser, setSearchedUser] = useState("");
+  const [saveMsg, setSaveMsg] = useState<"saved" | "exists" | null>(null);
+
+  useEffect(() => {
+    if (params.username) {
+      const name = params.username as string;
+      setQuery(name);
+      fetchProfile(name);
+    }
+  }, [params.username]);
 
   const handleSearch = async () => {
     const name = query.trim();
     if (!name) return;
+    fetchProfile(name);
+  };
 
+  const fetchProfile = async (name: string) => {
     setLoading(true);
     setError(null);
+    setSaveMsg(null);
     setUser(null);
     setRepos([]);
 
@@ -74,6 +93,22 @@ export default function Index() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSave = async () => {
+    if (!user) return;
+    const raw = await AsyncStorage.getItem(STORAGE_KEY);
+    const saved: string[] = raw ? JSON.parse(raw) : [];
+    if (saved.includes(user.login)) {
+      setSaveMsg("exists");
+    } else {
+      await AsyncStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify([...saved, user.login]),
+      );
+      setSaveMsg("saved");
+    }
+    setTimeout(() => setSaveMsg(null), 2500);
   };
 
   return (
@@ -158,6 +193,35 @@ export default function Index() {
             keyboardShouldPersistTaps="handled"
           >
             <ProfileCard user={user} />
+
+            {/* ── Save Developer ── */}
+            <TouchableOpacity
+              style={[
+                styles.saveBtn,
+                saveMsg === "exists" && styles.saveBtnExists,
+              ]}
+              onPress={handleSave}
+              activeOpacity={0.85}
+            >
+              <Ionicons
+                name={saveMsg === "exists" ? "bookmark" : "bookmark-outline"}
+                size={16}
+                color={saveMsg === "exists" ? "#E3B341" : "#fff"}
+              />
+              <Text
+                style={[
+                  styles.saveBtnText,
+                  saveMsg === "exists" && styles.saveBtnTextExists,
+                ]}
+              >
+                {saveMsg === "exists"
+                  ? "Already saved"
+                  : saveMsg === "saved"
+                    ? "Developer saved!"
+                    : "Save Developer"}
+              </Text>
+            </TouchableOpacity>
+
             <ResumeCard user={user} />
 
             <View style={styles.sectionCard}>
@@ -359,4 +423,30 @@ const styles = StyleSheet.create({
     lineHeight: 21,
   },
   bottomSpacer: { height: 24 },
+
+  // Save button
+  saveBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    backgroundColor: "#2EA043",
+    borderRadius: 10,
+    height: 44,
+    marginBottom: 12,
+  },
+  saveBtnExists: {
+    backgroundColor: "#2D2A1A",
+    borderWidth: 1,
+    borderColor: "#6E5B00",
+  },
+  saveBtnText: {
+    fontSize: 14,
+    fontWeight: "700",
+    color: "#fff",
+    letterSpacing: 0.2,
+  },
+  saveBtnTextExists: {
+    color: "#E3B341",
+  },
 });
