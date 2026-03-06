@@ -52,9 +52,9 @@ A mobile developer portfolio app built with **Expo (React Native)**. Search GitH
 
 ## Screenshots
 
-| Profile Viewer                                     | Repo Explorer                                      | Resume Generator                                        |
-| -------------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------- |
-| <img src="assets/screenshots/ProfileScreen.jpeg"/> | <img src="assets/screenshots/ExploreScreen.jpeg"/> | <img src="assets/screenshots/GithubResumeScreen.jpeg"/> |
+| Profile Viewer                                     | Repo Explorer                                      | Resume Generator                                        | Saved Developers                                 |
+| -------------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------- | ------------------------------------------------ |
+| <img src="assets/screenshots/ProfileScreen.jpeg"/> | <img src="assets/screenshots/ExploreScreen.jpeg"/> | <img src="assets/screenshots/GithubResumeScreen.jpeg"/> | <img src="assets/screenshots/SavedScreen.jpeg"/> |
 
 ---
 
