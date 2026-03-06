@@ -6,6 +6,14 @@ A mobile developer portfolio app built with **Expo (React Native)**. Search GitH
   <img src="assets/brand/logo.png" alt="CodeFolio Logo" width="280"/>
 </p>
 
+<p align="center">
+  <a href="https://github.com/Pratham-Prog861/codeFolio/releases/download/v1.0.0/codefolio.apk">
+    <img src="https://img.shields.io/badge/Download%20APK-v1.0.0-2EA043?style=for-the-badge&logo=android" alt="Download APK"/>
+  </a>
+  <img src="https://img.shields.io/badge/Platform-Android-2EA043?style=for-the-badge&logo=android" alt="Platform"/>
+  <img src="https://img.shields.io/badge/Built%20with-Expo%2055-000020?style=for-the-badge&logo=expo" alt="Expo"/>
+</p>
+
 ---
 
 ## Features
