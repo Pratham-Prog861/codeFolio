@@ -1,7 +1,38 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Tabs } from "expo-router";
+import React, { useEffect, useState } from "react";
+import OnboardingScreen from "../components/OnboardingScreen";
+import SplashScreenView from "../components/SplashScreenView";
+
+type AppState = "splash" | "onboarding" | "main";
 
 export default function RootLayout() {
+  const [appState, setAppState] = useState<AppState>("splash");
+
+  useEffect(() => {
+    const timer = setTimeout(async () => {
+      try {
+        const seen = await AsyncStorage.getItem("hasSeenOnboarding");
+        setAppState(seen === "true" ? "main" : "onboarding");
+      } catch {
+        setAppState("main");
+      }
+    }, 2300);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const finishOnboarding = async () => {
+    try {
+      await AsyncStorage.setItem("hasSeenOnboarding", "true");
+    } catch {}
+    setAppState("main");
+  };
+
+  if (appState === "splash") return <SplashScreenView />;
+  if (appState === "onboarding")
+    return <OnboardingScreen onDone={finishOnboarding} />;
+
   return (
     <Tabs
       screenOptions={{
